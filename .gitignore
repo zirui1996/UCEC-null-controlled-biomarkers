@@ -1,0 +1,48 @@
+# This repository publishes data-analysis code only.
+# Data, results, figures, logs and manuscript files are deliberately excluded.
+
+# ---- Data ----
+data_raw/
+data_processed/
+metadata/
+*.rds
+*.npy
+*.tar
+*.gz
+*.CEL
+MANIFEST.txt
+
+# ---- Results, tables and figures ----
+results/
+figures/
+tables/
+supplementary/
+refs/
+
+# ---- Logs and run records ----
+logs/
+*.log
+*sessionInfo*
+
+# ---- Plotting code, manuscript, protocol and history ----
+R/fig/
+R/supp/
+manuscript/
+manuscript/*.md
+manuscript/*.docx
+manuscript/*.ris
+manuscript/build/*.md
+manuscript/build/*.docx
+*protocol*.md
+archive/
+
+# ---- System and runtime ----
+.DS_Store
+.Rhistory
+.RData
+.Rproj.user/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+config/
+python/
