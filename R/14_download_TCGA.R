@@ -29,9 +29,19 @@ cat("patients with both a tumour and a normal sample:", np, "\n")
 
 saveRDS(se, "data_raw/TCGA/TCGA_UCEC_STARcounts_SE.rds")
 write.table(cd, "metadata/TCGA_UCEC_colData.tsv", sep="\t", row.names=FALSE, quote=FALSE)
+# the GDC data release is captured from the API rather than typed in, so the provenance record
+# always matches the data that were actually downloaded (the Methods must cite this release)
+gi <- getGDCInfo()
+rel <- sprintf("%d.%d (%s)", gi$data_release_version$major, gi$data_release_version$minor,
+               gi$data_release_version$release_date)
+cat("GDC data release:", rel, "\n")
 writeLines(c(paste("download date:", Sys.Date()),
+             paste("GDC data release:", rel),
+             paste("GDC API tag:", gi$tag, "| commit:", gi$commit),
              paste("TCGAbiolinks:", as.character(packageVersion("TCGAbiolinks"))),
-             paste("workflow: STAR - Counts"),
+             paste("workflow: STAR - Counts (GDC harmonized, hg38)"),
              paste("files:", nrow(res)), paste("SE:", paste(dim(se), collapse=" x ")),
+             paste("sample_type:", paste(names(table(cd$sample_type)), table(cd$sample_type),
+                                         sep=" ", collapse=" / ")),
              paste("matched pairs:", np)), "logs/TCGA_download_provenance.txt")
 cat("\n===== 14_download_TCGA DONE =====\n")

@@ -16,12 +16,16 @@ def fetch(url, dest):
         return
     subprocess.run(["curl", "-s", "-m", "120", "-o", dest, url], check=True)
 
-summary, manifest = [], []
+summary, manifest, versions = [], [], set()
 for gene, ens in GENES.items():
     xml = f"{PROJ}/data_raw/HPA/{ens}.xml"
     os.makedirs(os.path.dirname(xml), exist_ok=True)
     fetch(f"https://www.proteinatlas.org/{ens}.xml", xml)
     root = ET.parse(xml).getroot()
+    # the HPA release is declared inside the XML, so it is recorded rather than typed in
+    # (the Methods must cite this version)
+    ver = next((e.get("version") for e in root.iter("entry") if e.get("version")), None)
+    versions.add(ver)
     # IHC reliability (tissue section)
     rel = [(v.get("type"), v.text) for v in root.iter("verification")]
     print(f"\n===== {gene} ({ens}) =====")
@@ -64,6 +68,13 @@ for gene, ens in GENES.items():
                                          staining=s, location=p.findtext("location"),
                                          url=url, file=f"results/protein/images_panel/{fn}"))
 
+hpa_version = sorted(v for v in versions if v)
+assert len(hpa_version) == 1, f"genes came from different HPA releases: {hpa_version}"
+print(f"\nHPA version: {hpa_version[0]}")
+open(f"{PROJ}/logs/HPA_provenance.txt", "w").write(
+    f"HPA version: {hpa_version[0]}\n"
+    f"genes: {', '.join(f'{g} ({e})' for g, e in GENES.items())}\n"
+    f"images: {len(manifest)}\n")
 json.dump(summary, open(f"{PROJ}/results/protein/hpa_panel_summary.json", "w"), indent=1)
 json.dump(manifest, open(f"{PROJ}/results/protein/HPA_panel_image_manifest.json", "w"), indent=1)
 print(f"\n{len(manifest)} images -> {OUT_IMG}")
