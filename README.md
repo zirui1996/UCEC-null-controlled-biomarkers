@@ -32,6 +32,27 @@ code, logs and the manuscript are not included; they accompany the published art
 Scripts are numbered in execution order; the number prefix of each file matches the stage it belongs
 to.
 
+### Revision analyses (`R/40a`–`R/40n`)
+
+Reanalyses added during peer review. They run after the main pipeline and read its outputs.
+
+| Script | Analysis |
+|---|---|
+| `40a` | Four-gene score under alternative null definitions in TCGA-UCEC and GSE146889; patient-clustered bootstrap CI; unpaired, site- and plate-restricted subsets; normalization sensitivity; Monte Carlo CIs |
+| `40b` | Selection frequency versus single-gene AUC under Monte Carlo error and co-expression-module resampling |
+| `40c` | GSE106191 admission check with unrestricted, within-period and Freedman–Lane permutation |
+| `40d` | Superseded per-sample survival analysis (kept for traceability; replaced by `40j`) |
+| `40e` | Multivariable gene sets (LASSO, SVM-RFE, bootstrap-stable) evaluated as ridge-logistic classifiers against refitted random sets |
+| `40f` | Four-cohort consensus design and GSE17025 downsampling |
+| `40g` | Tumour-versus-normal effects of the core genes with and without a fibroblast marker score (genome-wide voom–limma) |
+| `40h` | Sample-level inclusion list for the GEO series assessed at sample level |
+| `40i` | Normalization diagnostics and scaled Schoenfeld residual figures |
+| `40j` | Patient as the unit of analysis: survival with one record per patient; discrimination with one tumour per patient |
+| `40k` | Nearest-neighbour effect-size-matched null with distinct genes per panel |
+| `40l` | GSE106191 under its prespecified, sensitivity and adopted analysis sets |
+| `40m` | Monte Carlo CIs for the empirical P values of the multivariable, admission and four-cohort analyses |
+| `40n` | Kaplan–Meier and Cox figure with one record per patient |
+
 ## Data
 
 No data are redistributed here. All inputs are public and are downloaded by the scripts in `R/`:
